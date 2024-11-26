@@ -1,9 +1,13 @@
 package com.example.springfinalexam.controller;
 
+import com.example.springfinalexam.dto.validasi.ValLoginDTO;
 import com.example.springfinalexam.dto.validasi.ValUserDTO;
+import com.example.springfinalexam.model.User;
 import com.example.springfinalexam.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,4 +45,13 @@ public class AuthController {
             return "Error: " + e.getMessage();
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@Valid @RequestBody ValLoginDTO valLoginDTO, HttpServletRequest request) {
+        User user = new User();
+        user.setUsername(valLoginDTO.getUsername());
+        user.setPassword(valLoginDTO.getPassword());
+        return authService.login(user, request);
+    }
+
 }
